@@ -12,10 +12,16 @@ export const ScreenContent = ({children}: { children?: ReactNode }) => (
     <div>{children}</div>
 )
 
+export const ScreenHeader = ({children}: { children?: ReactNode }) => (
+    <div>{children}</div>
+)
+
 export const HomeScreen = () => (
     <Screen>
-        <Heading>Dashboard</Heading>
-        <Intro>Lorem ipsum dolor sit amet.</Intro>
+        <ScreenHeader>
+            <Heading>Dashboard</Heading>
+            <Intro>Lorem ipsum dolor sit amet.</Intro>
+        </ScreenHeader>
         <ScreenContent>
             <Tasks>
                 <Task/>
@@ -26,8 +32,10 @@ export const HomeScreen = () => (
 
 export const ProjectsScreen = () => (
     <Screen>
-        <Heading>Projects</Heading>
-        <Intro>Lorem ipsum dolor sit amet.</Intro>
+        <ScreenHeader>
+            <Heading>Projects</Heading>
+            <Intro>Lorem ipsum dolor sit amet.</Intro>
+        </ScreenHeader>
         <ScreenContent>
             <Projects>
                 <Project/>
@@ -38,8 +46,10 @@ export const ProjectsScreen = () => (
 
 export const AccountScreen = () => (
     <Screen>
-        <Heading>Account</Heading>
-        <Intro>Lorem ipsum dolor sit amet.</Intro>
+        <ScreenHeader>
+            <Heading>Account</Heading>
+            <Intro>Lorem ipsum dolor sit amet.</Intro>
+        </ScreenHeader>
         <ScreenContent>
             <Form>
                 <Field name="password">
