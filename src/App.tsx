@@ -7,16 +7,14 @@ import {Route, Switch} from "react-router";
 function App() {
     return (
         <BrowserRouter>
-            <div className="App">
-                <Switch>
-                    <Route path="/dashboard">
-                        <Dashboard/>
-                    </Route>
-                    <Route path="/">
-                        <LoginPage/>
-                    </Route>
-                </Switch>
-            </div>
+            <Switch>
+                <Route path="/dashboard">
+                    <Dashboard/>
+                </Route>
+                <Route path="/">
+                    <LoginPage/>
+                </Route>
+            </Switch>
         </BrowserRouter>
     );
 }

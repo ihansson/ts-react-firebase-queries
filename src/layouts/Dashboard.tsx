@@ -3,7 +3,7 @@ import {Column, Grid, Wrapper} from "../components/Grid";
 import {Heading} from "../components/Elements";
 import {Nav, NavItem} from "../components/Nav";
 import {AccountScreen, HomeScreen, ProjectsScreen} from "../components/Screen";
-import {Switch, Route} from "react-router";
+import {Route, Switch} from "react-router";
 
 export const Dashboard = () => (
     <Wrapper>
