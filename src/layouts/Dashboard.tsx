@@ -1,7 +1,9 @@
 import React from "react";
 import {Column, Grid, Wrapper} from "../components/Grid";
-import {Heading, Nav, NavItem} from "../components/Elements";
+import {Heading} from "../components/Elements";
+import {Nav, NavItem} from "../components/Nav";
 import {AccountScreen, HomeScreen, ProjectsScreen} from "../components/Screen";
+import {Switch, Route} from "react-router";
 
 export const Dashboard = () => (
     <Wrapper>
@@ -9,15 +11,24 @@ export const Dashboard = () => (
             <Column>
                 <Heading>Sidebar</Heading>
                 <Nav>
-                    <NavItem>Dashboard</NavItem>
-                    <NavItem>Projects</NavItem>
-                    <NavItem>Account</NavItem>
+                    <NavItem to="/dashboard">Dashboard</NavItem>
+                    <NavItem to="/dashboard/projects">Projects</NavItem>
+                    <NavItem to="/dashboard/account">Account</NavItem>
+                    <NavItem to="/logout">Logout</NavItem>
                 </Nav>
             </Column>
             <Column>
-                <HomeScreen/>
-                <ProjectsScreen/>
-                <AccountScreen/>
+                <Switch>
+                    <Route path="/dashboard/account">
+                        <AccountScreen/>
+                    </Route>
+                    <Route path="/dashboard/projects">
+                        <ProjectsScreen/>
+                    </Route>
+                    <Route path="/dashboard">
+                        <HomeScreen/>
+                    </Route>
+                </Switch>
             </Column>
         </Grid>
     </Wrapper>
