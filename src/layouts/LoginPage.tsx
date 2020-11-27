@@ -1,6 +1,6 @@
 import React from 'react'
 import {Aligner, Block, Bottom, Column, Grid, Top, Wrapper} from "../components/Grid";
-import {CoverImage, Heading, Intro, Small} from "../components/Elements";
+import {Copyright, CoverImage, Heading, Intro} from "../components/Elements";
 import {LoginForm} from "../components/LoginForm";
 
 export const LoginPage = () => (
@@ -17,7 +17,7 @@ export const LoginPage = () => (
                     </Top>
                     <Bottom>
                         <Block>
-                            <Small>© 2020 Lorem Ipsum Dolor.<br/>All Rights Reserved.</Small>
+                            <Copyright/>
                         </Block>
                     </Bottom>
                 </Aligner>

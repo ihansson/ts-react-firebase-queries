@@ -1,9 +1,15 @@
 import React, {ReactNode} from "react";
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
-export const Nav = ({children}: { children?: ReactNode }) => <nav>{children}</nav>
-export const NavItem = ({children, to}: { children?: ReactNode, to: string }) => (
-    <Link to={to}>
-        <span>{children}</span>
-    </Link>
+export const Nav = ({children}: { children?: ReactNode }) => (
+    <nav>
+        <ul>{children}</ul>
+    </nav>
+)
+export const NavItem = ({children, to, withStyle = 'is-default'}: { children?: ReactNode, to: string, withStyle?: string }) => (
+    <li>
+        <NavLink exact={true} className={withStyle} to={to}>
+            <span>{children}</span>
+        </NavLink>
+    </li>
 )

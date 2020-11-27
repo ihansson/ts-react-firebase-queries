@@ -5,8 +5,10 @@ export const Wrapper = ({children}: { children?: ReactNode }) => (
         width: "100%",
         maxWidth: "80em",
         background: "white",
+        margin: "0 auto",
         boxShadow: "0 30px 40px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.1)",
-        borderRadius: "4px"
+        borderRadius: "4px",
+        overflow: "hidden"
     }}>{children}</div>
 )
 
@@ -16,10 +18,13 @@ export const Grid = ({children}: { children?: ReactNode }) => (
     }}>{children}</div>
 )
 
-export const Column = ({children, width = "auto"}: { children?: ReactNode, width?: string }) => (
-    <div style={{
+export const Column = ({children, width = "auto", withStyle = "is-default", spacing = "0"}:
+                           { children?: ReactNode, width?: string, withStyle?: string, spacing?: string }
+) => (
+    <div className={withStyle} style={{
         width,
-        flexGrow: 1
+        flexGrow: 1,
+        marginRight: spacing + "em"
     }}>{children}</div>
 )
 
@@ -44,9 +49,10 @@ export const Bottom = ({children}: { children?: ReactNode }) => (
     }}>{children}</div>
 )
 
-export const Block = ({children}: { children?: ReactNode }) => (
-    <div style={{
-        padding: "5em"
+export const Block = ({children, type = "major", withStyle = "is-default"}:
+                          { children?: ReactNode, type?: string, withStyle?: string }) => (
+    <div className={withStyle} style={{
+        padding: (type === "major" ? "5em" : "1.4em 1.6em")
     }}>{children}</div>
 )
 

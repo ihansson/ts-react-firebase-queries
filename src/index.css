@@ -352,6 +352,10 @@ template {
 
 /* Root */
 
+#root {
+    width: 100%;
+}
+
 body {
     font-family: 'Nunito', sans-serif;
     overflow: hidden;
@@ -369,7 +373,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
-    margin: 0 0 1em;
+    margin: 0 0 0.5em;
 }
 
 h1 {
@@ -378,7 +382,13 @@ h1 {
 }
 
 h1 + h2 {
-    margin: -1em 0 1.4em;
+    margin: -0.5em 0 1.4em;
+}
+
+h3 {
+    color: #4447ac;
+    font-weight: 900;
+    margin: 0 0 0.25em;
 }
 
 p {
@@ -412,9 +422,19 @@ button {
     outline: transparent;
 }
 
+a {
+    color: #333;
+    text-decoration: none;
+}
+
 label {
     display: block;
     margin: 0 0 0.4em;
+}
+
+.text-large {
+    font-size: 1.25em;
+    line-height: 1.5em;
 }
 
 .text-small {
@@ -422,10 +442,62 @@ label {
     line-height: 1.5em;
 }
 
+ul, li {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    margin-bottom: 0.2em;
+}
+
+ul {
+    margin-bottom: 0.75em;
+}
+
+.has-shadow {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.is-muted {
+    background: #fffaf5;
+}
+
+.is-muted-alt {
+    border-radius: 4px;
+    background: #fffaf5;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+}
+
+.is-muted-alt h3 {
+    color: #333333;
+}
+
+.is-warning {
+    color: #e68688;
+}
+
+a.is-default.active {
+    font-weight: 800;
+}
+
+.is-divided {
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    border-bottom: 2px solid #f7ede1;
+}
+
+.is-divided:last-child {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: 0;
+}
+
 /* Grid Helpers */
 
 .space > * {
-    margin: 0 0 1em
+    margin: 0.75em 0 0
 }
 
 .space > *:last-child {
