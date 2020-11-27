@@ -1,16 +1,9 @@
 import React, { ReactNode } from "react";
 import { Block, Grid } from "./Grid";
 import { Heading } from "./Elements";
-import { Link } from "react-router-dom";
-import { useSpring, animated, useTransition } from "react-spring";
+import { animated, useTransition } from "react-spring";
 
 export const Tasks = ({ children }: { children?: ReactNode }) => {
-  const tasksDueOpacity = useSpring({
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-    config: { duration: 2500 },
-  });
-
   const items = [
     {
       key: 1,
@@ -34,11 +27,7 @@ export const Tasks = ({ children }: { children?: ReactNode }) => {
   return (
     <div>
       <h3 style={{ marginBottom: "1em" }}>
-        You have{" "}
-        <animated.span style={tasksDueOpacity}>
-          {React.Children.count(children)}
-        </animated.span>{" "}
-        tasks due.
+        You have {React.Children.count(children)} tasks due.
       </h3>
       <Grid>
         {transitions.map(({ props, key }) => (
@@ -55,7 +44,11 @@ export const Tasks = ({ children }: { children?: ReactNode }) => {
 };
 export const Task = () => (
   <Block type="minor" withStyle="is-muted-alt">
-    <Heading type="minor">Task</Heading>
-    <Link to="/projects">View project</Link>
+    <Heading type="minor">
+      Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
+      <div style={{ textAlign: "right", marginTop: "0.5em" }}>
+        <button className="is-small is-success">Finish</button>
+      </div>
+    </Heading>
   </Block>
 );

@@ -15,6 +15,7 @@ import { HomeScreen } from "../components/screens/HomeScreen";
 import { AccountScreen } from "../components/screens/AccountScreen";
 import { ProjectsScreen } from "../components/screens/ProjectsScreen";
 import { ProjectScreen } from "../components/screens/ProjectScreen";
+import { UsersScreen } from "../components/screens/UsersScreen";
 
 export const Dashboard = () => (
   <Wrapper>
@@ -26,6 +27,7 @@ export const Dashboard = () => (
             <Nav>
               <NavItem to="/dashboard">Dashboard</NavItem>
               <NavItem to="/dashboard/projects">Projects</NavItem>
+              <NavItem to="/dashboard/users">Users</NavItem>
               <NavItem to="/dashboard/account">Account</NavItem>
             </Nav>
             <NavItem to="/logout" withStyle="is-warning">
@@ -39,6 +41,9 @@ export const Dashboard = () => (
           <Top>
             <Block>
               <Switch>
+                <Route path="/dashboard/users">
+                  <UsersScreen />
+                </Route>
                 <Route path="/dashboard/account">
                   <AccountScreen />
                 </Route>
