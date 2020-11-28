@@ -1,6 +1,12 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { useState, useEffect, useRef, SetStateAction } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  SetStateAction,
+  useCallback,
+} from "react";
 
 export interface Project {
   key: string;
@@ -17,99 +23,88 @@ export interface Task {
   pid: string;
 }
 
-export function useGetProjects() {
+function useFirebaseCollection(collection: string, query: any) {
   const db = firebase.firestore();
-  const projectsRef = useRef(db.collection("projects"));
+  const collectionRef = useRef(db.collection(collection));
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const [projects, setProjects] = useState([] as Array<Project>);
-
   useEffect(() => {
-    const getProjectsWithFirebase = async () => {
+    const queryWithFirebase = async () => {
       setLoading(true);
       setError("");
       try {
-        const results = await projectsRef.current.get();
-        const docs = results.docs as Array<any>;
-        setProjects(
-          docs.map((doc) => {
-            return { key: doc.id, id: doc.id, ...doc.data() };
-          })
-        );
+        await query(collectionRef.current);
       } catch (e) {
         setError(e.message);
       }
       setLoading(false);
     };
-    getProjectsWithFirebase();
-  }, [projectsRef]);
+    queryWithFirebase();
+  }, [collectionRef, setError, setLoading, query]);
 
-  return { loading, error, projects };
+  return [error, loading] as [string, boolean];
+}
+
+export function useGetProjects() {
+  const [projects, setProjects] = useState([] as Array<Project>);
+
+  const query = useCallback(
+    async (collectionRef: firebase.firestore.CollectionReference) => {
+      const results = await collectionRef.get();
+      const docs = results.docs as Array<any>;
+      setProjects(
+        docs.map((doc) => {
+          return { key: doc.id, id: doc.id, ...doc.data() };
+        })
+      );
+    },
+    []
+  );
+
+  const [error, loading] = useFirebaseCollection("projects", query);
+
+  return [error, loading, projects] as [string, boolean, Array<Project>];
 }
 
 export function useGetProject(id: string) {
-  const db = firebase.firestore();
-  const projectsRef = useRef(db.collection("projects"));
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
   const [project, setProject] = useState({} as Project);
 
-  useEffect(() => {
-    const getProjectWithFirebase = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const _project = await projectsRef.current.doc(id).get();
+  const query = useCallback(
+    async (collectionRef: firebase.firestore.CollectionReference) => {
+      const _project = await collectionRef.doc(id).get();
+      setProject({
+        key: _project.id,
+        id: _project.id,
+        ..._project.data(),
+      } as SetStateAction<Project>);
+    },
+    [id]
+  );
 
-        setProject({
-          key: _project.id,
-          id: _project.id,
-          ..._project.data(),
-        } as SetStateAction<Project>);
-      } catch (e) {
-        setError(e.message);
-      }
-      setLoading(false);
-    };
-    getProjectWithFirebase();
-  }, [id, projectsRef]);
+  const [error, loading] = useFirebaseCollection("projects", query);
 
   return [error, loading, project] as [string, boolean, Project];
 }
 
 export function useGetTasks(id: string) {
-  const db = firebase.firestore();
-  const tasksRef = useRef(db.collection("tasks"));
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
   const [tasks, setTasks] = useState([] as Array<Task>);
 
-  useEffect(() => {
-    const getTasksWithFirebase = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const results = await tasksRef.current.get();
-        const _tasks = results.docs as Array<any>;
+  const query = useCallback(
+    async (collectionRef: firebase.firestore.CollectionReference) => {
+      const results = await collectionRef.get();
+      const _tasks = results.docs as Array<any>;
 
-        setTasks(
-          _tasks.map((doc) => {
-            return { key: doc.id, id: doc.id, ...doc.data() };
-          })
-        );
-      } catch (e) {
-        setError(e.message);
-      }
-      setLoading(false);
-    };
-    getTasksWithFirebase();
-  }, [id, tasksRef]);
+      setTasks(
+        _tasks.map((doc) => {
+          return { key: doc.id, id: doc.id, ...doc.data() };
+        })
+      );
+    },
+    []
+  );
+
+  const [error, loading] = useFirebaseCollection("tasks", query);
 
   return [error, loading, tasks] as [string, boolean, Array<Task>];
 }

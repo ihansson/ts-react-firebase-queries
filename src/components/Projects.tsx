@@ -6,7 +6,7 @@ import { animated, useTransition } from "react-spring";
 import { useGetProjects, Project } from "../api/data";
 
 export const Projects = () => {
-  const { error, loading, projects } = useGetProjects();
+  const [error, loading, projects] = useGetProjects();
 
   const transitions = useTransition(projects, (item) => item.key, {
     from: { opacity: 0, transform: "translate3d(50px,0,0)" },
