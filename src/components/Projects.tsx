@@ -1,49 +1,44 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import { Heading } from "./Elements";
 import { Link } from "react-router-dom";
 import { Block } from "./Grid";
 import { animated, useTransition } from "react-spring";
+import { useGetProjects, Project } from "../api/data";
 
-export const Projects = ({ children }: { children?: ReactNode }) => {
-  const items = [
-    {
-      key: 1,
-      text: "A",
-    },
-    {
-      key: 2,
-      text: "B",
-    },
-    {
-      key: 3,
-      text: "C",
-    },
-  ];
-  const transitions = useTransition(items, (item) => item.key, {
+export const Projects = () => {
+  const { error, loading, projects } = useGetProjects();
+
+  const transitions = useTransition(projects, (item) => item.key, {
     from: { opacity: 0, transform: "translate3d(50px,0,0)" },
     enter: { opacity: 1, transform: "translate3d(0,0,0)" },
     config: { duration: 500 },
     trail: 300,
   });
 
+  if (error) return <div>{error}</div>;
+  if (loading) return <div>loading</div>;
+
   return (
     <section>
       <h3 style={{ marginBottom: "1em" }}>
-        You have {React.Children.count(children)} projects.
+        You have {projects.length} projects.
       </h3>
       <Block type="minor" withStyle="is-muted-alt">
-        {transitions.map(({ props, key }) => (
+        {transitions.map(({ props, key, item }) => (
           <animated.div key={key} style={{ ...props }} className="is-divided">
-            <Project />
+            <ProjectListItem project={item} />
           </animated.div>
         ))}
       </Block>
     </section>
   );
 };
-export const Project = () => (
+export const ProjectListItem = ({ project }: { project: Project }) => (
   <article>
-    <Heading type="minor">Project</Heading>
-    <Link to="/dashboard/projects/1">View project</Link>
+    <div style={{ marginBottom: "1em" }}>
+      <Heading type="minor">{project.id}</Heading>
+      <small>{project.description}</small>
+    </div>
+    <Link to={`/dashboard/projects/${project.id}`}>View project</Link>
   </article>
 );

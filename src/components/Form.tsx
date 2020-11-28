@@ -79,7 +79,9 @@ export const Select = ({ type = "user", name = "" }: SelectOptions) => {
   return (
     <select name={name}>
       {options.map((option) => (
-        <option value={option.value}>{option.text}</option>
+        <option key={option.value} value={option.value}>
+          {option.text}
+        </option>
       ))}
     </select>
   );

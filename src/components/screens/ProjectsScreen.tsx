@@ -1,5 +1,5 @@
 import { Button, Heading, Intro } from "../Elements";
-import { Project, Projects } from "../Projects";
+import { Projects } from "../Projects";
 import { Block, Space } from "../Grid";
 import { Field, Form, Input, Label } from "../Form";
 import React from "react";
@@ -12,10 +12,7 @@ export const ProjectsScreen = () => (
       <Intro>Lorem ipsum dolor sit amet.</Intro>
     </ScreenHeader>
     <ScreenContent>
-      <Projects>
-        <Project />
-        <Project />
-      </Projects>
+      <Projects />
       <div
         className="is-muted-alt"
         style={{ marginTop: "2.5em", width: "20em" }}

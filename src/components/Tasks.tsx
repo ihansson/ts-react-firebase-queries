@@ -1,24 +1,11 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import { Block, Grid } from "./Grid";
 import { Heading } from "./Elements";
 import { animated, useTransition } from "react-spring";
+import { Task } from "../api/data";
 
-export const Tasks = ({ children }: { children?: ReactNode }) => {
-  const items = [
-    {
-      key: 1,
-      text: "A",
-    },
-    {
-      key: 2,
-      text: "B",
-    },
-    {
-      key: 3,
-      text: "C",
-    },
-  ];
-  const transitions = useTransition(items, (item) => item.key, {
+export const Tasks = ({ tasks = [] }: { tasks?: Array<Task> }) => {
+  const transitions = useTransition(tasks, (item) => item.key, {
     from: { opacity: 0, transform: "translate3d(0,40px,0)" },
     enter: { opacity: 1, transform: "translate3d(0,0px,0)" },
     trail: 300,
@@ -26,26 +13,24 @@ export const Tasks = ({ children }: { children?: ReactNode }) => {
 
   return (
     <div>
-      <h3 style={{ marginBottom: "1em" }}>
-        You have {React.Children.count(children)} tasks due.
-      </h3>
+      <h3 style={{ marginBottom: "1em" }}>You have tasks due.</h3>
       <Grid>
-        {transitions.map(({ props, key }) => (
+        {transitions.map(({ props, key, item }) => (
           <animated.div
             key={key}
             style={{ ...props, flexGrow: 1, marginRight: "1em" }}
           >
-            <Task />
+            <TaskListItem task={item} />
           </animated.div>
         ))}
       </Grid>
     </div>
   );
 };
-export const Task = () => (
+export const TaskListItem = ({ task }: { task: Task }) => (
   <Block type="minor" withStyle="is-muted-alt">
     <Heading type="minor">
-      Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
+      {task.text}
       <div style={{ textAlign: "right", marginTop: "0.5em" }}>
         <button className="is-small is-success">Finish</button>
       </div>

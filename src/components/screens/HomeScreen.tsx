@@ -1,5 +1,5 @@
 import { Heading, Intro } from "../Elements";
-import { Task, Tasks } from "../Tasks";
+import { Tasks } from "../Tasks";
 import React from "react";
 import { Screen, ScreenContent, ScreenHeader } from "./Screen";
 
@@ -10,11 +10,7 @@ export const HomeScreen = () => (
       <Intro>Lorem ipsum dolor sit amet.</Intro>
     </ScreenHeader>
     <ScreenContent>
-      <Tasks>
-        <Task />
-        <Task />
-        <Task />
-      </Tasks>
+      <Tasks />
     </ScreenContent>
   </Screen>
 );
