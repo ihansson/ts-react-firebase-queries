@@ -13,7 +13,9 @@ export const Tasks = ({ tasks = [] }: { tasks?: Array<Task> }) => {
 
   return (
     <div>
-      <h3 style={{ marginBottom: "1em" }}>You have tasks due.</h3>
+      <h3 style={{ marginBottom: "1em" }}>
+        You have {tasks.length} tasks due.
+      </h3>
       <Grid>
         {transitions.map(({ props, key, item }) => (
           <animated.div
