@@ -1,3 +1,4 @@
+import firebase from "firebase/app";
 import { Heading, Intro } from "../Elements";
 import { Tasks } from "../Tasks";
 import React from "react";
@@ -9,7 +10,7 @@ export const HomeScreen = () => {
     string,
     boolean,
     Array<Task>
-  ] = useGetTasks("");
+  ] = useGetTasks({ userId: firebase.auth().currentUser?.uid });
 
   return (
     <Screen>

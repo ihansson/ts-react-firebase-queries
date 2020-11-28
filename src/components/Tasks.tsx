@@ -2,7 +2,7 @@ import React from "react";
 import { Block, Grid } from "./Grid";
 import { Heading } from "./Elements";
 import { animated, useTransition } from "react-spring";
-import { Task } from "../api/data";
+import { Task, useUpdateTask } from "../api/data";
 
 export const Tasks = ({ tasks = [] }: { tasks?: Array<Task> }) => {
   const transitions = useTransition(tasks, (item) => item.key, {
@@ -29,13 +29,30 @@ export const Tasks = ({ tasks = [] }: { tasks?: Array<Task> }) => {
     </div>
   );
 };
-export const TaskListItem = ({ task }: { task: Task }) => (
-  <Block type="minor" withStyle="is-muted-alt">
-    <Heading type="minor">
-      {task.text}
+export const TaskListItem = ({ task }: { task: Task }) => {
+  const { loading, success, error, updateTask } = useUpdateTask(
+    task.id,
+    "done"
+  );
+
+  if (loading) return <div>Loading</div>;
+  if (error) return <div>{error}</div>;
+  if (success) return <div>Updated</div>;
+
+  return (
+    <Block type="minor" withStyle="is-muted-alt">
+      <Heading type="minor">{task.text}</Heading>
+      <strong>Due:</strong> {task.due.seconds}
+      <br />
+      <strong>Assigned:</strong> {task.uid}
+      <br />
+      <strong>Status:</strong> {task.status}
+      <br />
       <div style={{ textAlign: "right", marginTop: "0.5em" }}>
-        <button className="is-small is-success">Finish</button>
+        <button onClick={updateTask} className="is-small is-success">
+          Finish
+        </button>
       </div>
-    </Heading>
-  </Block>
-);
+    </Block>
+  );
+};

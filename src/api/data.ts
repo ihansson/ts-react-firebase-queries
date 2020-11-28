@@ -18,7 +18,8 @@ export interface Task {
   key: string;
   id: string;
   text: string;
-  due: string;
+  due: { seconds: number };
+  status: string;
   uid: string;
   pid: string;
 }
@@ -87,12 +88,20 @@ export function useGetProject(id: string) {
   return [error, loading, project] as [string, boolean, Project];
 }
 
-export function useGetTasks(id: string) {
+export function useGetTasks({
+  userId = null,
+  projectId = null,
+}: {
+  userId?: string | null;
+  projectId?: string | null;
+}) {
   const [tasks, setTasks] = useState([] as Array<Task>);
 
   const query = useCallback(
     async (collectionRef: firebase.firestore.CollectionReference) => {
-      const results = await collectionRef.get();
+      const results = await collectionRef
+        .where(userId ? "uid" : "pid", "==", userId ? userId : projectId)
+        .get();
       const _tasks = results.docs as Array<any>;
 
       setTasks(
@@ -101,10 +110,79 @@ export function useGetTasks(id: string) {
         })
       );
     },
-    []
+    [projectId, userId]
   );
 
   const [error, loading] = useFirebaseCollection("tasks", query);
 
   return [error, loading, tasks] as [string, boolean, Array<Task>];
+}
+
+export function useUpdateTask(taskId: string, status: string) {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const updateTask = useCallback(
+    (e) => {
+      e.preventDefault();
+      setSuccess(false);
+      setError("");
+      const doUpdateTask = async () => {
+        setLoading(true);
+        try {
+          await firebase.firestore().collection("tasks").doc(taskId).update({
+            status: status,
+          });
+          setSuccess(true);
+        } catch (e) {
+          setError(e.message);
+        }
+        setLoading(false);
+      };
+      doUpdateTask();
+    },
+    [taskId, status]
+  );
+
+  return { loading, success, error, updateTask };
+}
+
+export function useAddTask(
+  projectId: string,
+  text: string,
+  assigned: string,
+  due: string
+) {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const addTask = useCallback(
+    (e) => {
+      e.preventDefault();
+      setSuccess(false);
+      setError("");
+      const doAddTask = async () => {
+        setLoading(true);
+        try {
+          await firebase.firestore().collection("tasks").add({
+            pid: projectId,
+            uid: assigned,
+            due: due,
+            text: text,
+            status: "open",
+          });
+          setSuccess(true);
+        } catch (e) {
+          setError(e.message);
+        }
+        setLoading(false);
+      };
+      doAddTask();
+    },
+    [projectId, text, assigned, due]
+  );
+
+  return { loading, success, error, addTask };
 }

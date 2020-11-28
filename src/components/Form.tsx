@@ -61,6 +61,7 @@ export const Input = ({
 export interface SelectOptions {
   type: "user";
   name?: string;
+  onChange?: (e: React.FormEvent<HTMLInputElement>) => void;
 }
 
 export interface SelectOption {
@@ -68,7 +69,11 @@ export interface SelectOption {
   text: string;
 }
 
-export const Select = ({ type = "user", name = "" }: SelectOptions) => {
+export const Select = ({
+  type = "user",
+  name = "",
+  onChange = () => null,
+}: SelectOptions) => {
   let options: Array<SelectOption> = [];
   if (type === "user") {
     options = [
@@ -76,8 +81,10 @@ export const Select = ({ type = "user", name = "" }: SelectOptions) => {
       { value: "2", text: "User B" },
     ];
   }
+  let props: any = {};
+  if (onChange) props.onChange = onChange;
   return (
-    <select name={name}>
+    <select name={name} {...props}>
       {options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.text}
