@@ -1,8 +1,16 @@
 import React, { ReactNode } from "react";
 
-export const Form = ({ children }: { children?: ReactNode }) => (
-  <form>{children}</form>
-);
+export const Form = ({
+  children,
+  onSubmit = () => null,
+}: {
+  children?: ReactNode;
+  onSubmit?: (e: React.FormEvent<HTMLInputElement>) => void;
+}) => {
+  let props: any = {};
+  if (onSubmit) props.onSubmit = onSubmit;
+  return <form {...props}>{children}</form>;
+};
 
 export interface FieldOptions {
   children?: ReactNode;
@@ -31,10 +39,23 @@ export const Label = ({ children, name = "" }: LabelOptions) => (
 export interface InputOptions {
   type: "text" | "email" | "password" | "date";
   name?: string;
+  defaultValue?: string;
+  onChange?: (e: React.FormEvent<HTMLInputElement>) => void;
 }
 
-export const Input = ({ type = "text", name = "" }: InputOptions) => {
-  return <input name={name} type={type} />;
+export const Input = ({
+  type = "text",
+  name = "",
+  defaultValue = "",
+  onChange = () => null,
+}: InputOptions) => {
+  let props: any = {
+    name,
+    type,
+  };
+  if (defaultValue) props.defaultValue = defaultValue;
+  if (onChange) props.onChange = onChange;
+  return <input {...props} />;
 };
 
 export interface SelectOptions {
