@@ -30,21 +30,15 @@ export const Tasks = ({ tasks = [] }: { tasks?: Array<Task> }) => {
   );
 };
 export const TaskListItem = ({ task }: { task: Task }) => {
-  const { loading, success, error, updateTask } = useUpdateTask(
-    task.id,
-    "done"
-  );
+  const { loading, error, updateTask } = useUpdateTask(task.id, "done");
 
   if (loading) return <div>Loading</div>;
   if (error) return <div>{error}</div>;
-  if (success) return <div>Updated</div>;
 
   return (
     <Block type="minor" withStyle="is-muted-alt">
       <Heading type="minor">{task.text}</Heading>
-      <strong>Due:</strong> {task.due.seconds}
-      <br />
-      <strong>Assigned:</strong> {task.uid}
+      <strong>Due:</strong> {task.due}
       <br />
       <strong>Status:</strong> {task.status}
       <br />

@@ -11,6 +11,7 @@ import {
 export interface Project {
   key: string;
   id: string;
+  name: string;
   description: string;
 }
 
@@ -18,7 +19,7 @@ export interface Task {
   key: string;
   id: string;
   text: string;
-  due: { seconds: number };
+  due: string;
   status: string;
   uid: string;
   pid: string;
@@ -52,13 +53,14 @@ export function useGetProjects() {
 
   const query = useCallback(
     async (collectionRef: firebase.firestore.CollectionReference) => {
-      const results = await collectionRef.get();
-      const docs = results.docs as Array<any>;
-      setProjects(
-        docs.map((doc) => {
-          return { key: doc.id, id: doc.id, ...doc.data() };
-        })
-      );
+      await collectionRef.onSnapshot((results) => {
+        const docs = results.docs as Array<any>;
+        setProjects(
+          docs.map((doc) => {
+            return { key: doc.id, id: doc.id, ...doc.data() };
+          })
+        );
+      });
     },
     []
   );
@@ -73,12 +75,13 @@ export function useGetProject(id: string) {
 
   const query = useCallback(
     async (collectionRef: firebase.firestore.CollectionReference) => {
-      const _project = await collectionRef.doc(id).get();
-      setProject({
-        key: _project.id,
-        id: _project.id,
-        ..._project.data(),
-      } as SetStateAction<Project>);
+      await collectionRef.doc(id).onSnapshot((_project) => {
+        setProject({
+          key: _project.id,
+          id: _project.id,
+          ..._project.data(),
+        } as SetStateAction<Project>);
+      });
     },
     [id]
   );
@@ -99,16 +102,17 @@ export function useGetTasks({
 
   const query = useCallback(
     async (collectionRef: firebase.firestore.CollectionReference) => {
-      const results = await collectionRef
+      await collectionRef
         .where(userId ? "uid" : "pid", "==", userId ? userId : projectId)
-        .get();
-      const _tasks = results.docs as Array<any>;
+        .onSnapshot((results) => {
+          const _tasks = results.docs as Array<any>;
 
-      setTasks(
-        _tasks.map((doc) => {
-          return { key: doc.id, id: doc.id, ...doc.data() };
-        })
-      );
+          setTasks(
+            _tasks.map((doc) => {
+              return { key: doc.id, id: doc.id, ...doc.data() };
+            })
+          );
+        });
     },
     [projectId, userId]
   );
@@ -185,4 +189,35 @@ export function useAddTask(
   );
 
   return { loading, success, error, addTask };
+}
+
+export function useAddProject(name: string, description: string) {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const addProject = useCallback(
+    (e) => {
+      e.preventDefault();
+      setSuccess(false);
+      setError("");
+      const doAddProject = async () => {
+        setLoading(true);
+        try {
+          await firebase.firestore().collection("projects").add({
+            name,
+            description,
+          });
+          setSuccess(true);
+        } catch (e) {
+          setError(e.message);
+        }
+        setLoading(false);
+      };
+      doAddProject();
+    },
+    [name, description]
+  );
+
+  return { loading, success, error, addProject };
 }

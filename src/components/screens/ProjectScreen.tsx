@@ -33,7 +33,7 @@ export const ProjectScreen = () => {
   return (
     <Screen>
       <ScreenHeader>
-        <Heading>Project: {project.id}</Heading>
+        <Heading>Project: {project.name}</Heading>
         <Intro>{project.description}.</Intro>
       </ScreenHeader>
       <ScreenContent>
@@ -68,7 +68,7 @@ const AddTaskForm = ({ projectId }: { projectId: string }) => {
   const [assigned, setAssigned] = useState("");
   const [due, setDue] = useState("");
 
-  const { loading, success, error, addTask } = useAddTask(
+  const { loading, error, addTask } = useAddTask(
     projectId,
     text,
     assigned,
@@ -77,7 +77,6 @@ const AddTaskForm = ({ projectId }: { projectId: string }) => {
 
   if (loading) return <div>Loading</div>;
   if (error) return <div>{error}</div>;
-  if (success) return <div>Updated</div>;
 
   return (
     <Form onSubmit={addTask}>

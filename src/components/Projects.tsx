@@ -36,7 +36,7 @@ export const Projects = () => {
 export const ProjectListItem = ({ project }: { project: Project }) => (
   <article>
     <div style={{ marginBottom: "1em" }}>
-      <Heading type="minor">{project.id}</Heading>
+      <Heading type="minor">{project.name}</Heading>
       <small>{project.description}</small>
     </div>
     <Link to={`/dashboard/projects/${project.id}`}>View project</Link>
